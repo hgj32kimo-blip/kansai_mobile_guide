@@ -46,13 +46,13 @@
         .mobile-select { width: 100%; padding: 0.8rem; border-radius: 8px; border: 1.5px solid var(--border); background: white; font-size: 0.95rem; font-weight: 600; color: var(--text-main); outline: none; }
         .mobile-select:focus { border-color: var(--jr-blue); }
 
-        /* 檢視器容器 */
+        /* 檢視器容器（高度提升為 70vh，更符合平板大螢幕閱覽） */
         .viewer-box { border: 1px solid var(--border); border-radius: 8px; overflow: hidden; background: #334155; margin-top: 0.6rem; }
         .viewer-actions { display: flex; gap: 0.5rem; padding: 0.6rem; background: #e2e8f0; }
         .action-btn { flex: 1; text-align: center; padding: 0.6rem; border-radius: 6px; font-size: 0.85rem; font-weight: 600; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 0.3rem; }
         .btn-blue { background: var(--jr-blue); color: white; }
         .btn-white { background: white; color: var(--text-main); border: 1px solid var(--border); }
-        .map-iframe { width: 100%; height: 420px; border: none; display: block; background: #f8fafc; }
+        .map-iframe { width: 100%; height: 70vh; min-height: 420px; border: none; display: block; background: #f8fafc; }
 
         /* 標籤徽章 */
         .badge { display: inline-block; padding: 0.15rem 0.45rem; border-radius: 4px; font-size: 0.7rem; color: white; font-weight: 600; vertical-align: middle; }
@@ -118,9 +118,10 @@
                     <a id="btn-fullscreen" class="action-btn btn-blue" href="https://www.hanshin.co.jp/global/tw/pdf/rosenmap.pdf" target="_blank">↗ 全螢幕原圖 / 另開</a>
                     <a id="btn-download" class="action-btn btn-white" href="https://www.hanshin.co.jp/global/tw/pdf/rosenmap.pdf" target="_blank">⤓ 下載 / 開啟</a>
                 </div>
-                <iframe id="map-frame" class="map-iframe" src="https://www.hanshin.co.jp/global/tw/pdf/rosenmap.pdf"></iframe>
+                <!-- 預設透過 Google Docs Viewer 載入阪神全網圖 -->
+                <iframe id="map-frame" class="map-iframe" src="https://docs.google.com/viewer?embedded=true&url=https%3A%2F%2Fwww.hanshin.co.jp%2Fglobal%2Ftw%2Fpdf%2Frosenmap.pdf"></iframe>
             </div>
-            <p style="font-size: 0.75rem; color: #64748b; margin-top: 0.5rem; text-align: center;">手機檢視可雙指放大。若選擇 Osaka Metro 官方專頁，請點擊上方「全螢幕原圖」直接查閱。</p>
+            <p style="font-size: 0.75rem; color: #64748b; margin-top: 0.5rem; text-align: center;">平板可直接在預覽框內雙指縮放或拖移。若需原始檔案請點擊「全螢幕原圖」。</p>
         </div>
     </div>
 
@@ -441,12 +442,6 @@
                 <a class="link-btn" href="https://www.westjr.co.jp/global/tc/timetable/pdf/map_kansai.pdf" target="_blank" rel="noopener">
                     <span>JR 西日本近畿全域路線圖 (PDF)</span><span class="arr">↗</span>
                 </a>
-                <a class="link-btn" href="https://katsuo-ji-temple.or.jp/access/" target="_blank" rel="noopener">
-                    <span>勝尾寺官方交通時刻表</span><span class="arr">↗</span>
-                </a>
-                <a class="link-btn" href="https://www.usj.co.jp/web/zh/tw/access" target="_blank" rel="noopener">
-                    <span>日本環球影城 (USJ) 官方交通指南</span><span class="arr">↗</span>
-                </a>
                 <a class="link-btn" href="https://trafficinfo.westjr.co.jp/kinki.html" target="_blank" rel="noopener">
                     <span>JR 西日本列車即時運轉狀況</span><span class="arr">↗</span>
                 </a>
@@ -485,14 +480,14 @@
         }
     }
 
-    // 官方高清向量來源映射清單 (含備用防擋機制)
+    // 官方高清向量來源映射清單 (透過 Google Docs Viewer 轉譯嵌入)
     const mapSources = {
         'hanshin-kansai': {
-            url: "https://www.hanshin.co.jp/global/tw/pdf/rosenmap.pdf",
+            url: "https://docs.google.com/viewer?embedded=true&url=" + encodeURIComponent("https://www.hanshin.co.jp/global/tw/pdf/rosenmap.pdf"),
             openUrl: "https://www.hanshin.co.jp/global/tw/pdf/rosenmap.pdf"
         },
         'jr-west': {
-            url: "https://www.westjr.co.jp/global/tc/timetable/pdf/map_kansai.pdf",
+            url: "https://docs.google.com/viewer?embedded=true&url=" + encodeURIComponent("https://www.westjr.co.jp/global/tc/timetable/pdf/map_kansai.pdf"),
             openUrl: "https://www.westjr.co.jp/global/tc/timetable/pdf/map_kansai.pdf"
         },
         'osaka-metro': {
@@ -501,7 +496,7 @@
         }
     };
 
-    // 手機下拉選單切換地圖
+    // 平板/手機下拉選單切換地圖
     function changeMap(key) {
         const data = mapSources[key];
         if (data) {
