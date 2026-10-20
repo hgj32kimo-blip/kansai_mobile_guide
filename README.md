@@ -1,0 +1,2 @@
+# kansai_mobile_guide
+kansai_mobile_guide
